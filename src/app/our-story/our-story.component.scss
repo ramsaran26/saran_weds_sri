@@ -1,0 +1,125 @@
+/* ── Timeline layout ── */
+.tl-row {
+  display: grid;
+  grid-template-columns: 1fr 56px 1fr;
+  gap: 0 2.5rem;
+  align-items: center;          /* vertically center image with text */
+  padding: 3rem 0;
+  border-bottom: 1px solid var(--line);
+
+  &:last-child { border-bottom: none; }
+}
+
+.tl-content {
+  padding: 0.5rem 0;
+}
+
+/* ── Image wrapper ── */
+.tl-image-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  aspect-ratio: 3 / 1;          /* consistent card shape */
+  background: var(--ice-1);     /* beige placeholder while loading */
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+
+  /* Subtle zoom on scroll-in */
+  &.visible img {
+    transform: scale(1.03);
+  }
+
+  /* Label badge */
+  .tl-image-label {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    background: rgba(44, 26, 14, 0.65);   /* --charcoal with opacity */
+    color: var(--cream);
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    backdrop-filter: blur(4px);
+  }
+
+  /* Brown border accent — appears after reveal */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid transparent;
+    transition: border-color 0.5s ease 0.3s;
+    pointer-events: none;
+  }
+
+  &.visible::after {
+    border-color: rgba(123, 79, 46, 0.25);   /* --gold faint */
+  }
+}
+
+/* ── Reveal base state (hidden) ── */
+.reveal {
+  opacity: 0;
+  transition:
+    opacity   0.7s ease,
+    transform 0.7s ease;
+
+  &.reveal-right {
+    transform: translateX(40px);
+  }
+
+  &.reveal-left {
+    transform: translateX(-40px);
+  }
+
+  /* ── Revealed state ── */
+  &.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Also animate text content blocks */
+.tl-content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity   0.6s ease 0.15s,   /* slight delay after image */
+    transform 0.6s ease 0.15s;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .tl-row {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 1.5rem 0;
+  }
+
+  .tl-spine { display: none; }   /* hide spine on mobile */
+
+  .tl-image-wrap {
+    aspect-ratio: 3 / 1;        /* wider on mobile */
+
+    &.reveal-left,
+    &.reveal-right {
+      transform: translateY(30px);   /* vertical slide on mobile */
+    }
+
+    &.visible {
+      transform: translateY(0);
+    }
+  }
+}

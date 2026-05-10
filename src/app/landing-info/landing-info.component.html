@@ -1,0 +1,46 @@
+<section class="hero" style="padding:0;" aria-label="Hero">
+  <div class="hero-text">
+    <p class="hero-label">We are getting married</p>
+    <h1 class="hero-names">
+      <span>Srinidhi</span>
+      <span class="ampersand">weds</span>
+      <span>Sarankarthick</span>
+    </h1>
+    <div class="hero-divider">
+      <div class="hero-divider-line"></div>
+      <!-- <span class="hero-divider-text">June 07, 2026 &middot; Chinnammanur,Theni</span> -->
+      <app-scratch-card revealText="June 07, 2026 · Chinnammanur, Theni" coverText="Scratch to reveal ✦" />
+      <div class="hero-divider-line"></div>
+    </div>
+  </div>
+
+  <div class="hero-visual welcomeImage" aria-hidden="true">
+
+    <!-- Slides -->
+    <div class="hero-slides">
+      <div class="hero-slide" *ngFor="let slide of slides; let i = index" [class.active]="i === activeIndex"
+        [class.prev]="i === prevIndex">
+        <img [src]="slide.image" [alt]="slide.alt" />
+        <!-- Dark overlay for text readability -->
+        <div class="slide-overlay"></div>
+      </div>
+    </div>
+
+    <!-- Monogram & date — sits above slides -->
+    <div class="hero-monogram">S&#x2764;&#xfe0e;S</div>
+    <!-- <div class="hero-date-stamp">07 &middot; VI &middot; MMXXVI</div> -->
+
+    <!-- Dot indicators -->
+    <div class="slide-dots">
+      <button *ngFor="let slide of slides; let i = index" class="slide-dot" [class.active]="i === activeIndex"
+        (click)="goToSlide(i)" [attr.aria-label]="'Go to slide ' + (i + 1)">
+      </button>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="slide-progress">
+      <div class="slide-progress-bar" [style.animation-duration]="intervalMs + 'ms'" [class.running]="isRunning"></div>
+    </div>
+
+  </div>
+</section>

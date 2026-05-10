@@ -1,0 +1,175 @@
+/* ── Grid ── */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 260px 260px;
+  gap: 6px;                         /* small gap so cells feel like tiles */
+  margin-top: 3rem;
+}
+
+/* ── Cell — clip boundary ── */
+.gallery-cell {
+  overflow: hidden;                 /* CRITICAL — keeps zoom inside the box */
+  position: relative;
+  border-radius: 3px;
+  cursor: pointer;
+
+  /* Each cell has a unique entrance delay for page load */
+  &:nth-child(1) .gallery-inner { transition-delay: 0s;    }
+  &:nth-child(2) .gallery-inner { transition-delay: 0.05s; }
+  &:nth-child(3) .gallery-inner { transition-delay: 0.1s;  }
+  &:nth-child(4) .gallery-inner { transition-delay: 0.15s; }
+  &:nth-child(5) .gallery-inner { transition-delay: 0.2s;  }
+
+  &.tall {
+    grid-row: span 2;
+  }
+}
+
+/* ── Inner wrapper — this is what lifts out ── */
+.gallery-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 3px;
+
+  /* The "come out" effect — scale up the whole inner block */
+  transition:
+    transform    0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow   0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* Lift out on hover — parent cell clips the overflow */
+  .gallery-cell:hover & {
+    transform:  scale(1.06);
+    box-shadow:
+      0  8px 30px rgba(44, 26, 14, 0.35),
+      0  2px  8px rgba(44, 26, 14, 0.15);
+  }
+}
+
+/* ── Image — additional zoom inside the lift ── */
+.gallery-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  .gallery-cell:hover & {
+    transform: scale(1.08);         /* image zooms a little more than the card */
+  }
+}
+
+/* ── Overlay — slides up on hover ── */
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 1.25rem 1rem;
+
+  /* Dark gradient from bottom */
+  background: linear-gradient(
+    to top,
+    rgba(44, 26, 14, 0.75) 0%,
+    rgba(44, 26, 14, 0.2)  50%,
+    transparent            100%
+  );
+
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity   0.35s ease,
+    transform 0.35s ease;
+
+  .gallery-cell:hover & {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Label inside overlay ── */
+.gallery-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245, 239, 230, 0.92);   /* --cream */
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+
+  /* Underline draw animation */
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold-light);
+    transition: width 0.4s ease 0.1s;
+  }
+
+  .gallery-cell:hover & {
+    &::after { width: 100%; }
+  }
+}
+
+/* ── Corner accent — draws on hover ── */
+.gallery-inner::before,
+.gallery-inner::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  z-index: 2;
+  transition:
+    width   0.3s ease,
+    height  0.3s ease,
+    opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Top-left corner bracket */
+.gallery-inner::before {
+  top: 10px; left: 10px;
+  border-top:  1px solid rgba(245, 239, 230, 0.6);
+  border-left: 1px solid rgba(245, 239, 230, 0.6);
+}
+
+/* Bottom-right corner bracket */
+.gallery-inner::after {
+  bottom: 10px; right: 10px;
+  border-bottom: 1px solid rgba(245, 239, 230, 0.6);
+  border-right:  1px solid rgba(245, 239, 230, 0.6);
+}
+
+.gallery-cell:hover .gallery-inner::before,
+.gallery-cell:hover .gallery-inner::after {
+  width: 28px;
+  height: 28px;
+  opacity: 1;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(3, 220px);
+  }
+
+  .gallery-cell.tall {
+    grid-row: span 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 220px);
+    gap: 4px;
+  }
+}

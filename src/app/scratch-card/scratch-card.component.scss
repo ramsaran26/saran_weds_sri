@@ -1,0 +1,29 @@
+.scratch-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: crosshair;
+}
+
+/* The text underneath — always rendered, revealed when canvas clears */
+.reveal-text {
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Canvas sits exactly over the text */
+.scratch-canvas {
+  position: absolute;
+  inset: -6px -12px;           /* slightly larger than text for padding */
+  width: calc(100% + 24px);
+  height: calc(100% + 12px);
+  border-radius: 2px;
+  cursor: grab;
+  touch-action: none;           /* prevent page scroll while scratching on mobile */
+  box-shadow: 0 2px 12px rgba(44, 26, 14, 0.25);
+}

@@ -1,0 +1,89 @@
+/* ── Make anchor card behave like the div card ── */
+.detail-card--link {
+  display: flex;             /* override <a> default inline */
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  position: relative;
+  transition:
+    background   0.25s ease,
+    box-shadow   0.25s ease,
+    transform    0.2s ease;
+
+  /* Subtle lift on hover */
+  &:hover {
+    background:  var(--ice-2);        /* beige tint */
+    box-shadow:  0 4px 24px rgba(44, 26, 14, 0.08);
+    transform:   translateY(-2px);
+
+    /* Animate the pin icon */
+    .detail-icon-wrap svg {
+      stroke: var(--gold-light);
+      transform: translateY(-3px);
+      transition: transform 0.3s ease, stroke 0.3s ease;
+    }
+
+    /* Show map hint */
+    .detail-map-hint {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Brown left border accent on hover */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 15%; bottom: 15%;
+    width: 2px;
+    background: var(--gold);
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: transform 0.3s ease;
+    border-radius: 2px;
+  }
+
+  &:hover::before {
+    transform: scaleY(1);
+  }
+}
+
+/* ── "Open in Maps" hint row ── */
+.detail-map-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;           /* push to bottom of card */
+  padding-top: 0.75rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity   0.25s ease,
+    transform 0.25s ease;
+
+  svg {
+    width: 12px;
+    height: 12px;
+    stroke: var(--gold);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+}
+
+/* Ensure icon transition resets cleanly */
+.detail-icon-wrap svg {
+  transition: transform 0.3s ease, stroke 0.3s ease;
+}
+
+/* detail-card needs flex-direction column for margin-top auto to work */
+.detail-card {
+  display: flex;
+  flex-direction: column;
+}
